@@ -1,0 +1,17 @@
+# .travis.yml
+language: node_js
+node_js:
+- "10"
+
+branches:
+  only:
+  - master
+install:
+- npm install
+
+before_script:
+- git config --global user.name 'monthly-act'
+- git config --global user.email 'monthly.with.act@gmail.com'
+
+script:
+- npm run test
