@@ -6,3 +6,7 @@ node_modules/
 public/
 .deploy*/
 .idea
+sessions/
+/.env.localhost
+/package-lock.json
+/.env

@@ -1,6 +1,7 @@
 {
-  "extends": [
-    "eslint:recommended",
-    "plugin:node/recommended"
-  ]
+  "env": {
+    "node": true
+  },
+  "extends": "airbnb-base",
+  "plugins": ["promise"]
 }

@@ -1,35 +1,37 @@
+const logger = require('morgan');
 const createError = require('http-errors');
-const express = require('express');
-const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const logger = require('morgan');
+const express = require('express');
+
+const app = express();
 require('dotenv').config();
+require('./plugins')(app);
 
 const indexRouter = require('./routes');
 const usersRouter = require('./routes/users');
+const authRouter = require('./routes/auth');
 const roomsRouter = require('./routes/rooms');
 
-const app = express();
-
+app.disable('etag');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true}));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/rooms', roomsRouter);
+app.use('/api', indexRouter);
+app.use('/api/auth', authRouter);
+app.use('/api/users', usersRouter);
+app.use('/api/rooms', roomsRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use((req, res, next) => {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res) {
+app.use((err, req, res) => {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -38,7 +40,5 @@ app.use(function(err, req, res) {
   res.status(err.status || 500);
   res.render('error');
 });
-
-mongoose.connect(process.env.MONGODB_URL, { useNewUrlParser: true });
 
 module.exports = app;

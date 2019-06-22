@@ -1,20 +1,20 @@
 const mongoose = require('mongoose');
 
-const roomSchema = mongoose.Schema({
-  title: {
+const messageSchema = mongoose.Schema({
+  status: {
     type: String,
     required: true,
   },
-  link: {
+  msg: {
     type: String,
     required: true,
   },
-  owner: {
+  sender: {
     type: String,
     required: true,
   },
-  open: {
-    type: Boolean,
+  roomId: {
+    type: String,
     required: true,
   },
   create_date: {
@@ -23,4 +23,4 @@ const roomSchema = mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model('Room', roomSchema);
+module.exports = mongoose.model('Message', messageSchema);

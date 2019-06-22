@@ -1,12 +1,15 @@
-const Room =require("../models/Room");
+const Room = require('../models/Room');
 
-async function findAll() {
-  return await Room.find({});
+async function findAll(email) {
+  return Room.find({ owner: email });
 }
 
-async function save(requestRoom) {
+async function save({ title, link }, email) {
   const room = new Room();
-  room.name = requestRoom.name;
+  room.title = title;
+  room.link = link;
+  room.owner = email;
+  room.open = true;
 
   await room.save();
 
