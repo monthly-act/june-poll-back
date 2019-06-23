@@ -1,13 +1,13 @@
 const io = require('socket.io')(process.env.SOCKET_PORT);
 const messageService = require('../services/message-service');
 
-// TODO origin
-// io.origins((origin, callback) => {
-//   if (origin !== process.env.FRONTEND_URL) {
-//     return callback('origin not allowed', false);
-//   }
-//   callback(null, true);
-// });
+io.origins((origin, callback) => {
+  if (origin !== process.env.FRONTEND_URL) {
+    console.log('origin not allowed');
+    return callback('origin not allowed', false);
+  }
+  return callback(null, true);
+});
 
 io.on('connection', (socket) => {
   console.log('connected : ', Object.keys(io.sockets.clients().connected).length);
@@ -19,12 +19,12 @@ io.on('connection', (socket) => {
   socket.on('message', async ({
     msg, status, sender, roomId,
   }) => {
-    const id = await messageService.save({
+    const { _id: id, create_date: createDate } = await messageService.save({
       msg, status, sender, roomId,
     });
 
     io.to(room).emit('message', {
-      id, msg, status, sender,
+      id, msg, status, sender, createDate,
     });
   });
 

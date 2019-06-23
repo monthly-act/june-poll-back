@@ -5,7 +5,7 @@ config:
       r_var: 'test-room'
   phases:
     - duration: 10
-      arrivalRate: 30
+      arrivalRate: 1
 scenarios:
   - engine: "socketio"
     flow:

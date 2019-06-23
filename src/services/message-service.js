@@ -8,7 +8,7 @@ function findByRoomId(roomId) {
       status: 1,
       sender: 1,
       roomId: 1,
-      create_date: 1,
+      createDate: '$create_date',
     })
     .sort({ create_date: 'asc' });
 }
@@ -24,7 +24,7 @@ async function save({
 
   await message.save();
 
-  return message._id;
+  return message;
 }
 
 module.exports = {
