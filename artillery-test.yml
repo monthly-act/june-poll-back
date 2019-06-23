@@ -1,0 +1,15 @@
+config:
+  target: "http://localhost:3333"
+  socketio:
+    query:
+      r_var: 'test-room'
+  phases:
+    - duration: 10
+      arrivalRate: 30
+scenarios:
+  - engine: "socketio"
+    flow:
+      - emit:
+          channel: 'message'
+          data: {msg: 'm', status: 'GOOD', sender: 'm', roomId: 'test-room'}
+      - think: 1
