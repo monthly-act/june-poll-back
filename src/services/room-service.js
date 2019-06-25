@@ -1,6 +1,10 @@
 const Room = require('../models/Room');
 
-async function findAll(email) {
+function findByLink(link) {
+  return Room.findOne({ link });
+}
+
+function findAll(email) {
   return Room.find({ owner: email });
 }
 
@@ -17,6 +21,7 @@ async function save({ title, link }, email) {
 }
 
 module.exports = {
+  findByLink,
   findAll,
   save,
 };

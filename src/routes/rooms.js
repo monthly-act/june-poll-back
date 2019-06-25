@@ -15,6 +15,15 @@ router.get('/', isAuthenticated, async (req, res) => {
   });
 });
 
+router.get('/:id', async (req, res) => {
+  const room = await roomService.findByLink(`${req.params.id}`);
+
+  res.json({
+    status: 'success',
+    data: room,
+  });
+});
+
 router.get('/:id/messages', async (req, res) => {
   const messages = await messageService.findByRoomId(req.params.id);
 

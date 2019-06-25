@@ -1,13 +1,20 @@
 const fs = require('fs');
 const mongoose = require('mongoose');
 
+const sslOptions = {};
+if (process.env.NODE_ENV === 'production') {
+  Object.assign(sslOptions, {
+    ssl: true,
+    sslValidate: false,
+    sslCA: fs.readFileSync('./rds-combined-ca-bundle.pem'),
+  });
+}
+
 mongoose.connect(
   process.env.MONGODB_URL,
   {
     useNewUrlParser: true,
-    ssl: true,
-    sslValidate: false,
-    sslCA: fs.readFileSync('./rds-combined-ca-bundle.pem'),
+    ...sslOptions,
   },
 ).then(() => console.log('Connection to DB successful'))
   .catch(err => console.error(err, 'Error'));
