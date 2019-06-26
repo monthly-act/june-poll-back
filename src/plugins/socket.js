@@ -10,19 +10,19 @@ io.origins((origin, callback) => {
 });
 
 io.on('connection', (socket) => {
-  console.log('connected : ', Object.keys(io.sockets.clients().connected).length);
-
   const room = socket.handshake.query.r_var;
-
   socket.join(room);
+
+  io.to(room).emit('connected_user_count', io.sockets.adapter.rooms[room].length);
 
   socket.on('message', async ({
     msg, status, sender, roomId,
-  }) => {
+  }, fn) => {
     const { _id: id, create_date: createDate } = await messageService.save({
       msg, status, sender, roomId,
     });
 
+    fn('ok');
     io.to(room).emit('message', {
       id, msg, status, sender, createDate,
     });
@@ -31,6 +31,8 @@ io.on('connection', (socket) => {
   socket.on('disconnected', () => {
     socket.leave(room);
     console.log('user disconnected');
+
+    io.to(room).emit('connected_user_count', io.sockets.adapter.rooms[room].length);
   });
 });
 
