@@ -5,7 +5,7 @@ function findByLink(link) {
 }
 
 function findAll(email) {
-  return Room.find({ owner: email });
+  return Room.find({ owner: email }).sort({ create_date: -1 });
 }
 
 async function save({ title, link }, email) {

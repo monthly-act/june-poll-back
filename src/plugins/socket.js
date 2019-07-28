@@ -3,17 +3,24 @@ const messageService = require('../services/message-service');
 
 io.origins((origin, callback) => {
   if (origin !== process.env.FRONTEND_URL) {
-    console.log('origin not allowed');
+    console.error('origin not allowed');
     return callback('origin not allowed', false);
   }
   return callback(null, true);
 });
 
+function emitUserCountToRoom(room) {
+  const roomAdapter = io.sockets.adapter.rooms[room];
+  if (roomAdapter) {
+    io.to(room).emit('connected_user_count', roomAdapter.length);
+  }
+}
+
 io.on('connection', (socket) => {
   const room = socket.handshake.query.r_var;
   socket.join(room);
 
-  io.to(room).emit('connected_user_count', io.sockets.adapter.rooms[room].length);
+  emitUserCountToRoom(room);
 
   socket.on('message', async ({
     msg, status, sender, roomId,
@@ -32,7 +39,7 @@ io.on('connection', (socket) => {
     socket.leave(room);
     console.log('user disconnected');
 
-    io.to(room).emit('connected_user_count', io.sockets.adapter.rooms[room].length);
+    emitUserCountToRoom(room);
   });
 });
 
