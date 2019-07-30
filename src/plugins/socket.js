@@ -1,13 +1,13 @@
 const io = require('socket.io')(process.env.SOCKET_PORT);
 const messageService = require('../services/message-service');
 
-io.origins((origin, callback) => {
-  if (origin !== process.env.FRONTEND_URL) {
-    console.error('origin not allowed');
-    return callback('origin not allowed', false);
-  }
-  return callback(null, true);
-});
+// io.origins((origin, callback) => {
+//   if (origin !== process.env.FRONTEND_URL) {
+//     console.error('origin not allowed');
+//     return callback('origin not allowed', false);
+//   }
+//   return callback(null, true);
+// });
 
 function emitUserCountToRoom(room) {
   const roomAdapter = io.sockets.adapter.rooms[room];
